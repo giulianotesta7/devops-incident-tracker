@@ -5,7 +5,7 @@ The project is used to practice a basic DevOps workflow with Docker, Docker Comp
 
 ## roadmap
 
-- [ ] Initialize Flask project structure
+- [x] Initialize Flask project structure
 - [ ] Implement basic ticket CRUD 
 - [ ] Improve UI with templates and basic styling
 - [ ] Integrate MySQL as the main database
