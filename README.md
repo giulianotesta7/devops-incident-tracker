@@ -8,7 +8,7 @@ The project is used to practice a basic DevOps workflow with Docker, Docker Comp
 - [x] Initialize Flask project structure
 - [ ] Implement basic ticket CRUD 
 - [ ] Improve UI with templates and basic styling
-- [ ] Integrate MySQL as the main database
+- [x] Integrate MySQL as the main database
 - [ ] Dockerize the Flask app and database
 - [ ] Set up Jenkins CI pipeline (build and test)
 - [ ] Automate deployment to AWS EC2
