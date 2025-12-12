@@ -6,7 +6,6 @@
     {% for incident in incidents | selectattr("status", "equalto", "Open") %}
         <div class="incident">
             <h2>{{ incident.title }} | #{{ incident.id }} </h2>
-            <p>{{ incident.description }}</p>
             <p>Severity: {{ incident.severity }}</p>
             <p>Status: {{ incident.status }}</p>
             <p>Created at: {{ incident.created_at }}</p>

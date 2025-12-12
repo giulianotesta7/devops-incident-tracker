@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash
-from models import incident
+from models import Incident
 from database import db
 
 bp = Blueprint('bp', __name__)
@@ -22,7 +22,7 @@ def create_incident():
             flash("All fields are required!", "error")
             return redirect(url_for('bp.create_incident'))
         else:
-            new_incident = incident(title=tittle, description=description, severity=severity)
+            new_incident = Incident(title=tittle, description=description, severity=severity)
             db.session.add(new_incident)
             db.session.commit()
             flash("Incident created successfully!", "success")
@@ -34,5 +34,5 @@ def create_incident():
 
 @bp.route('/incidents')
 def incidents():
-    incidents = incident.query.order_by(incident.created_at.desc()).all()
+    incidents = Incident.query.order_by(Incident.created_at.desc()).all()
     return render_template('incidents.html', incidents=incidents)

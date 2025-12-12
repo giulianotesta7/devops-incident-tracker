@@ -1,6 +1,6 @@
 from database import db
 
-class incident(db.Model):
+class Incident(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=False)
