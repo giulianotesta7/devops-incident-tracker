@@ -20,13 +20,13 @@ def create_incident():
         severity=request.form['severity']
         if not tittle or not description or not severity:
             flash("All fields are required!", "error")
-            return render_template('create-incident.html')
+            return redirect(url_for('bp.create_incident'))
         else:
             new_incident = incident(title=tittle, description=description, severity=severity)
             db.session.add(new_incident)
             db.session.commit()
             flash("Incident created successfully!", "success")
-            return redirect('create-incident.html')
+            return redirect(url_for('bp.create_incident'))
     
 
 
