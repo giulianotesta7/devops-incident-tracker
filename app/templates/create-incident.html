@@ -4,7 +4,7 @@
 
 <h1>Submit incident information</h1>
 
-<form action="#">
+<form aaction="{{ url_for('bp.create_incident') }}" method="POST">
     <label for="title">Title:</label><br>
     <input type="text" id="title" name="title"><br><br>
     <label for="description">Description:</label><br>
