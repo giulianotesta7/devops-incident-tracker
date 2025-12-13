@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block body%}
+
+<h1>Submit incident information</h1>
+
+<form action="{{ url_for('bp.create_incident') }}" method="POST">
+    <label for="title">Title:</label><br>
+    <input type="text" id="title" name="title"><br><br>
+    <label for="description">Description:</label><br>
+    <textarea id="description" name="description" rows="4" cols="50"></textarea><br><br>
+    <label for="severity">Severity:</label><br>
+    <select id="severity" name="severity">
+        <option value="Low">Low</option>
+        <option value="Medium">Medium</option>
+        <option value="High">High</option>
+    </select><br><br>
+    <input type="submit" value="Submit">
+
+</form>
+
+
+
+{% endblock%}

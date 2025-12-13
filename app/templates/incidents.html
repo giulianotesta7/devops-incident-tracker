@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block body%}
+<h1>Review your open incidents</h1>
+
+    {% for incident in incidents | selectattr("status", "equalto", "Open") %}
+        <div class="incident">
+            <h2>
+                <a href="{{ url_for('bp.incident_detail', incident_id=incident.id) }}">
+                {{ incident.title }} | #{{ incident.id }} 
+                </a>
+            </h2>
+            <p>Severity: {{ incident.severity }}</p>
+            <p>Status: {{ incident.status }}</p>
+            <p>Created at: {{ incident.created_at }}</p>
+        </div>
+    {% else %}
+        <p>No open incidents found.</p>
+    {% endfor %}
+{% endblock %}
