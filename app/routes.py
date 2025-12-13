@@ -37,7 +37,17 @@ def incidents():
     incidents = Incident.query.order_by(Incident.created_at.desc()).all()
     return render_template('incidents.html', incidents=incidents)
 
-@bp.route('/incidents/<int:incident_id>')
+
+@bp.route('/incidents/<int:incident_id>', methods=['GET', 'POST'])
 def incident_detail(incident_id):
     incident = Incident.query.get_or_404(incident_id)
     return render_template('incident-detail.html', incident=incident)
+
+@bp.route('/incidents/<int:incident_id>/update-status', methods=['POST'])
+def solve_incident(incident_id):
+    if request.method == 'POST':
+        incident = Incident.query.get_or_404(incident_id)
+        incident.status = 'Solved'
+        db.session.commit()
+        flash("Incident marked as resolved.", "success")
+        return redirect(url_for('bp.incidents'))
