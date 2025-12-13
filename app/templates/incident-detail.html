@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<div>
+    <h1>{{ incident.title }} | ID: #{{ incident.id }} </h1>
+    <h2>Severity: {{ incident.severity }} | Created at: {{ incident.created_at }} </h2>
+    <p style="font-size: 20px">{{ incident.description }}</p>
+</div>
+
+
+
+
+{% endblock %}

@@ -36,3 +36,8 @@ def create_incident():
 def incidents():
     incidents = Incident.query.order_by(Incident.created_at.desc()).all()
     return render_template('incidents.html', incidents=incidents)
+
+@bp.route('/incidents/<int:incident_id>')
+def incident_detail(incident_id):
+    incident = Incident.query.get_or_404(incident_id)
+    return render_template('incident-detail.html', incident=incident)
