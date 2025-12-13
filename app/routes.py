@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, request, flash
+from flask import Blueprint, render_template, redirect, url_for, request, flash, jsonify
 from models import Incident
 from database import db
 
@@ -51,3 +51,7 @@ def solve_incident(incident_id):
         db.session.commit()
         flash("Incident marked as resolved.", "success")
         return redirect(url_for('bp.incidents'))
+    
+@bp.route('/health')
+def health_check():
+    return jsonify({'status': 'ok', 'message': 'service is up'}), 200
