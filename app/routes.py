@@ -50,7 +50,7 @@ def solve_incident(incident_id):
         incident.status = 'Solved'
         db.session.commit()
         flash("Incident marked as resolved.", "success")
-        return redirect(url_for('bp.incidents'))
+        return redirect(url_for('bp.incident_detail', incident_id=incident_id))
     
 @bp.route('/health')
 def health_check():
