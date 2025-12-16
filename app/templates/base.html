@@ -4,17 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% block head %}
-    <p>
-        navbar
-    </p>
-    <nav>
-        <ul>
-            <li><a href="{{ url_for('bp.incidents') }}">Incidents</a></li>
-            <li><a href="{{ url_for('bp.create_incident') }}">Create Incident</a></li>
-            <li><a href="{{ url_for('bp.about') }}">About</a></li>
+      {% if current_user.is_authenticated%}
+        <h3>
+            Welcome, {{ current_user.name }}
+        </h3>
+        <nav>
+          <h3>
+            
+          </h3>
+            <ul>
+                <li><a href="{{ url_for('bp.incidents') }}">Incidents</a></li>
+                <li><a href="{{ url_for('bp.create_incident') }}">Create Incident</a></li>
+                <li><a href="{{ url_for('bp.about') }}">About</a></li>
 
-        </ul>
-    </nav>
+            </ul>
+        </nav>
+      {% endif %}
     {% endblock %}
 </head>
 
