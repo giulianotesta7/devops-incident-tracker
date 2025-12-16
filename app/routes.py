@@ -41,7 +41,11 @@ def incidents():
 @bp.route('/incidents/<int:incident_id>', methods=['GET', 'POST'])
 def incident_detail(incident_id):
     incident = Incident.query.get_or_404(incident_id)
-    return render_template('incident-detail.html', incident=incident)
+    comments = (Comment.query
+                .filter_by(incident_id=incident_id)
+                .order_by(Comment.created_at.desc())
+                .all())
+    return render_template('incident-detail.html', incident=incident, comments=comments)
 
 @bp.route('/incidents/<int:incident_id>/update-status', methods=['POST'])
 def solve_incident(incident_id):
