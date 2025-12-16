@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash, jsonify
-from models import Incident
+from models import Incident, Comment
 from database import db
 
 bp = Blueprint('bp', __name__)
@@ -41,7 +41,11 @@ def incidents():
 @bp.route('/incidents/<int:incident_id>', methods=['GET', 'POST'])
 def incident_detail(incident_id):
     incident = Incident.query.get_or_404(incident_id)
-    return render_template('incident-detail.html', incident=incident)
+    comments = (Comment.query
+                .filter_by(incident_id=incident_id)
+                .order_by(Comment.created_at.desc())
+                .all())
+    return render_template('incident-detail.html', incident=incident, comments=comments)
 
 @bp.route('/incidents/<int:incident_id>/update-status', methods=['POST'])
 def solve_incident(incident_id):
@@ -51,7 +55,24 @@ def solve_incident(incident_id):
         db.session.commit()
         flash("Incident marked as resolved.", "success")
         return redirect(url_for('bp.incident_detail', incident_id=incident_id))
-    
+
+@bp.route('/incidents/<int:incident_id>/comment', methods=['POST'])
+def comment_incident(incident_id):
+   if request.method == 'POST':
+        content=request.form['comment']
+        if not content:
+            flash("Comment cannot be empty!", "error")
+            return redirect(url_for('bp.incident_detail', incident_id=incident_id))
+        else:
+            new_comment = Comment(content=content, incident_id=incident_id)
+            db.session.add(new_comment)
+            db.session.commit()
+            flash("Comment added successfully!", "success")
+            return redirect(url_for('bp.incident_detail', incident_id=incident_id))
+
+
+'''
 @bp.route('/health')
 def health_check():
     return jsonify({'status': 'ok', 'message': 'service is up'}), 200
+'''
