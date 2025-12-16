@@ -19,6 +19,14 @@
 
             </ul>
         </nav>
+      {% else %}
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('auth.login') }}">Login</a></li>
+                <li><a href="{{ url_for('auth.sign_up') }}">Sign Up</a></li>
+                <li><a href="{{ url_for('bp.about') }}">About</a></li>
+            </ul>
+        </nav>
       {% endif %}
     {% endblock %}
 </head>
