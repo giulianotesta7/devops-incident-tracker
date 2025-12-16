@@ -1,14 +1,12 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from utils import is_valid_email
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 from models import User
 from database import db
+from flask_login import login_user
+from routes import bp
 
 auth = Blueprint('auth', __name__)
-
-@auth.route('/login', methods=['GET', 'POST'])
-def login():
-    return render_template('login.html')
 
 @auth.route('/sign-up', methods=['GET', 'POST'])
 def sign_up():
@@ -42,19 +40,25 @@ def sign_up():
         db.session.commit()
         flash("Account created successfully!", "success")
         return redirect(url_for('auth.login'))
-        
-
-        
-
-
-
-        
-
-
-    
-            
-        
-   
-        # Here you would typically add logic to create the user
-        # and store it in the database
     return render_template('sign-up.html')
+    
+@auth.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        email = request.form.get('email', '').strip().lower()
+        password = request.form.get('password', '')
+
+        user = User.query.filter_by(email=email).first()
+
+        if not user or not check_password_hash(user.password, password):
+            flash("Invalid credentials, try again", "error")
+            return redirect(url_for('auth.login'))
+
+        login_user(user, remember=True)
+        flash("Logged in successfully!", "success")
+        return redirect(url_for('bp.incidents'))
+
+    return render_template('login.html')
+
+        
+
