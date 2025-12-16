@@ -17,7 +17,7 @@ class Incident(db.Model):
 
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    incident_id = db.Column(db.Integer, db.ForeignKey("incidents.id"), nullable=False, index=True)
+    incident_id = db.Column(db.Integer, db.ForeignKey("incident.id"), nullable=False, index=True)
     content = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=db.func.current_timestamp())
     # Many -> 1
