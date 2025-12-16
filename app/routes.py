@@ -12,7 +12,7 @@ def root():
 def about():
     return render_template('about.html')
 
-@bp.route('/create-incident', methods=['GET', 'POST'])
+@bp.route('/incidents/create', methods=['GET', 'POST'])
 def create_incident():
     if request.method == 'POST':
         tittle=request.form['title']
