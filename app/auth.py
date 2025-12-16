@@ -15,7 +15,6 @@ def sign_up():
         name = request.form.get('full_name','').strip()
         password = request.form.get('password','')
         confirm_password = request.form.get('confirm_password','')
-        print( email, name, password, confirm_password)
 
         existing_email = User.query.filter_by(email=email).first()
 
@@ -63,5 +62,5 @@ def login():
 @auth.route('/logout')
 def logout():
     logout_user()
-    flash("Logged ", "Logged out")
+    flash("Logged out ", "Logged out")
     return redirect(url_for('auth.login'))
