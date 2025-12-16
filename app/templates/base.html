@@ -6,7 +6,7 @@
     {% block head %}
       {% if current_user.is_authenticated%}
         <h3>
-            Welcome, {{ current_user.name }}
+            Welcome, {{ current_user.name }} | <a href="{{ url_for('auth.logout')}}">Logout</a>
         </h3>
         <nav>
           <h3>
