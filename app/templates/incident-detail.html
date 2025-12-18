@@ -7,7 +7,7 @@
         ID: #{{ incident.id }} |
         {{ incident.status }} | 
         Assigned to: {{ incident.assignee.name if incident.assignee else 'Unassigned' }}
-        {% if incident.status == 'Open' %} 
+        {% if incident.status == 'Open' and current_user.id == incident.assigned_to_id %} 
         <form action="{{ url_for('bp.solve_incident', incident_id=incident.id) }}" method="POST">
             <button type="submit">Mark as Solved</button>
         </form>
