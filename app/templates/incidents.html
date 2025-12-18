@@ -1,8 +1,36 @@
 {% extends 'base.html' %}
 
 {% block body%}
-<h1>Review your open incidents</h1>
 
+<label>
+  <input type="radio" name="status" value="pending" checked>
+  Your pending Work
+</label>
+
+<label>
+  <input type="radio" name="status" value="waiting">
+  Waiting a solution
+</label>
+
+
+<div id="pendingBlock">
+    {% for incident in incidents | selectattr("status", "equalto", "Open") | selectattr("assigned_to_id","equalto", current_user.id) %}
+        <div class="incident">
+            <h2>
+                <a href="{{ url_for('bp.incident_detail', incident_id=incident.id) }}">
+                {{ incident.title }} | #{{ incident.id }} 
+                </a>
+            </h2>
+            <p>Severity: {{ incident.severity }}</p>
+            <p>Status: {{ incident.status }}</p>
+            <p>Created at: {{ incident.created_at }}</p>
+        </div>
+    {% else %}
+        <p>No pending incidents found.</p>
+    {% endfor %}
+</div>
+
+<div id="waitingBlock">
     {% for incident in incidents | selectattr("status", "equalto", "Open") | selectattr("created_by_id","equalto", current_user.id) %}
         <div class="incident">
             <h2>
@@ -15,6 +43,9 @@
             <p>Created at: {{ incident.created_at }}</p>
         </div>
     {% else %}
-        <p>No open incidents found.</p>
+        <p>No incidents found.</p>
     {% endfor %}
+</div>
+
+<script src="{{ url_for('static', filename='js/incidents.js') }}"></script>
 {% endblock %}
