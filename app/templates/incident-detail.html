@@ -7,11 +7,15 @@
         ID: #{{ incident.id }} |
         {{ incident.status }} | 
         Assigned to: {{ incident.assignee.name if incident.assignee else 'Unassigned' }}
-        {% if incident.status == 'Open' and current_user.id == incident.assigned_to_id %} 
-        <form action="{{ url_for('bp.solve_incident', incident_id=incident.id) }}" method="POST">
-            <button type="submit">Mark as Solved</button>
+        <form action="{{ url_for('bp.update_status', incident_id=incident.id) }}" method="POST">
+            {% if incident.status == 'Open' and current_user.id == incident.assigned_to_id %} 
+            <button type="submit" name="action" value="solve">Mark as Solved</button>
+            {% endif %}
+            {% if incident.status == 'Open' %} 
+            <button type="submit" name="action" value="cancel">Cancel</button>
+            {% endif %}
         </form>
-        {% endif %} 
+
     </h1> 
     <h2>
         Severity: {{ incident.severity }} | 
