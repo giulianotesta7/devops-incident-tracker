@@ -53,13 +53,20 @@ def incident_detail(incident_id):
     return render_template('incident-detail.html', incident=incident, comments=comments)
 
 @bp.route('/incidents/<int:incident_id>/update-status', methods=['POST'])
-def solve_incident(incident_id):
+def update_status(incident_id):
     if request.method == 'POST':
+        action = request.form.get('action')
         incident = Incident.query.get_or_404(incident_id)
-        incident.status = 'Solved'
+        if action == 'solve':
+            incident.status = 'Solved'
+            flash("Incident marked as solved.", "success")
+        elif action == 'cancel':
+            incident.status = 'Cancelled'
+            flash("Incident marked as cancelled.", "success")
         db.session.commit()
-        flash("Incident marked as resolved.", "success")
+        
         return redirect(url_for('bp.incident_detail', incident_id=incident_id))
+
 
 @bp.route('/incidents/<int:incident_id>/comment', methods=['POST'])
 def comment_incident(incident_id):
