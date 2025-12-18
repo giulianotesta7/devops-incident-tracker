@@ -3,7 +3,7 @@
 {% block body%}
 <h1>Review your open incidents</h1>
 
-    {% for incident in incidents | selectattr("status", "equalto", "Open") %}
+    {% for incident in incidents | selectattr("status", "equalto", "Open") | selectattr("created_by_id","equalto", current_user.id) %}
         <div class="incident">
             <h2>
                 <a href="{{ url_for('bp.incident_detail', incident_id=incident.id) }}">
