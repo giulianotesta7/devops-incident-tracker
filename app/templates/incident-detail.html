@@ -5,7 +5,8 @@
     <h1>
         {{ incident.title }} | 
         ID: #{{ incident.id }} |
-        {{ incident.status }}
+        {{ incident.status }} | 
+        Assigned to: {{ incident.assignee.name if incident.assignee else 'Unassigned' }}
         {% if incident.status == 'Open' %} 
         <form action="{{ url_for('bp.solve_incident', incident_id=incident.id) }}" method="POST">
             <button type="submit">Mark as Solved</button>

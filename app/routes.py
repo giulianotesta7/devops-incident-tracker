@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash, jsonify
-from models import Incident, Comment
+from models import Incident, Comment, User
 from database import db
 from flask_login import current_user, login_required
 
@@ -24,19 +24,18 @@ def create_incident():
         tittle=request.form['title']
         description=request.form['description']
         severity=request.form['severity']
+        assignee=request.form['assignee']
         if not tittle or not description or not severity:
             flash("All fields are required!", "error")
             return redirect(url_for('bp.create_incident'))
         else:
-            new_incident = Incident(title=tittle, description=description, severity=severity, created_by_id=current_user.id)  
+            new_incident = Incident(title=tittle, description=description, severity=severity, created_by_id=current_user.id, assigned_to_id=assignee if assignee else None)  
             db.session.add(new_incident)
             db.session.commit()
             flash("Incident created successfully!", "success")
             return redirect(url_for('bp.create_incident'))
     
-
-
-    return render_template('create-incident.html')
+    return render_template('create-incident.html', users=db.session.query(User).all())
 
 @bp.route('/incidents')
 def incidents():
