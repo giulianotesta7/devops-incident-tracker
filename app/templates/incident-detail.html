@@ -14,7 +14,7 @@
     </h1> 
     <h2>
         Severity: {{ incident.severity }} | 
-        Created at: {{ incident.created_at }} |
+        Created at: {{ incident.created_at }} by {{ incident.creator.name }} |
     </h2>
     <p style="font-size: 20px">{{ incident.description }}</p>
 </div>
