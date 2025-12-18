@@ -15,6 +15,13 @@
         <option value="Medium">Medium</option>
         <option value="High">High</option>
     </select><br><br>
+    <label for="assignee">Assign to:</label><br>
+    <select id="assignee" name="assignee">
+        <option value="">---</option>
+        {% for user in users %}
+        <option value="{{ user.id }}">{{ user.name }}</option>
+        {% endfor %}
+    </select><br><br>
     <input type="submit" value="Submit">
 
 </form>
