@@ -1,7 +1,18 @@
 {% extends 'base.html' %}
 
 {% block body%}
-<h1>Review your open incidents</h1>
+
+<label>
+  <input type="radio" name="status" value="pending" checked>
+  Your pending Work
+</label>
+
+<label>
+  <input type="radio" name="status" value="waiting">
+  Waiting a solution
+</label>
+
+
 
     {% for incident in incidents | selectattr("status", "equalto", "Open") | selectattr("created_by_id","equalto", current_user.id) %}
         <div class="incident">
