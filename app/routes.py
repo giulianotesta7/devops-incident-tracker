@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash, jsonify
 from models import Incident, Comment
 from database import db
-from flask_login import login_required
+from flask_login import current_user, login_required
 
 bp = Blueprint('bp', __name__)
 
@@ -28,7 +28,7 @@ def create_incident():
             flash("All fields are required!", "error")
             return redirect(url_for('bp.create_incident'))
         else:
-            new_incident = Incident(title=tittle, description=description, severity=severity)
+            new_incident = Incident(title=tittle, description=description, severity=severity, created_by_id=current_user.id)  
             db.session.add(new_incident)
             db.session.commit()
             flash("Incident created successfully!", "success")
