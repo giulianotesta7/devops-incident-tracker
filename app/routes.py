@@ -1,8 +1,14 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash, jsonify
 from models import Incident, Comment
 from database import db
+from flask_login import login_required
 
 bp = Blueprint('bp', __name__)
+
+@bp.before_request
+@login_required
+def login_required():
+    pass
 
 @bp.route('/')
 def root():

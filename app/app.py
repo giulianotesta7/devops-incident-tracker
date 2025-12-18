@@ -1,9 +1,12 @@
 from flask import Flask
 from flask_migrate import Migrate
-from routes import bp
+from routes import bp as main_bp
+from auth import auth as auth_bp
 from flask_sqlalchemy import SQLAlchemy
 from config import config
 from database import db
+from flask_login import LoginManager
+from models import User
 
 
 
@@ -18,8 +21,18 @@ app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{user}:{password}@{hos
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
+
 migrate = Migrate(app, db)
-app.register_blueprint(bp)
+app.register_blueprint(main_bp)
+app.register_blueprint(auth_bp)
+
+login_manager = LoginManager()
+login_manager.login_view = 'auth.login'
+login_manager.init_app(app)
+
+@login_manager.user_loader
+def load_user(user_id):  
+    return User.query.get(int(user_id))
 
 if __name__ == "__main__":
     app.run(debug=True)
