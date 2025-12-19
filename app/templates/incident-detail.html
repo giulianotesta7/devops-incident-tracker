@@ -45,13 +45,16 @@
 
 
 {% for comment in comments %}
+    {% if not comment.is_system %}
     <div class="comment">
         <h4>{{ comment.commenter.name }}:</h4>
-        <p>{{ comment.content }}</p>
-        <p><em>Posted at: {{ comment.created_at }}</em></p>
+        <p>{{ comment.content }} | {{ comment.created_at }}</p>
     </div>
-{% else %}
-    <p>No comments yet.</p>
+    {% else %}
+    <div class="system-comment">
+        <p><em>{{ comment.content }} | {{ comment.created_at }}</em></p>
+    </div>
+    {% endif %}
 {% endfor %}
 
 
