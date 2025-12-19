@@ -50,7 +50,7 @@ def incident_detail(incident_id):
                 .filter_by(incident_id=incident_id)
                 .order_by(Comment.created_at.desc())
                 .all())
-    return render_template('incident-detail.html', incident=incident, comments=comments)
+    return render_template('incident-detail.html', incident=incident, comments=comments, users=db.session.query(User).all())
 
 @bp.route('/incidents/<int:incident_id>/update-status', methods=['POST'])
 def update_status(incident_id):
@@ -81,6 +81,26 @@ def comment_incident(incident_id):
             db.session.commit()
             flash("Comment added successfully!", "success")
             return redirect(url_for('bp.incident_detail', incident_id=incident_id))
+        
+@bp.route('/incidents/<int:incident_id>/reassign', methods=['POST'])
+def reassign_incident(incident_id):
+   if request.method == 'POST':
+        reassigne=request.form['reassignee']
+        if not reassigne:
+            incident = Incident.query.get_or_404(incident_id)
+            incident.assigned_to_id = None
+            db.session.add(incident)
+            db.session.commit()
+            flash("Incident unassigned", "error")
+            return redirect(url_for('bp.incident_detail', incident_id=incident_id))
+        else:
+            incident = Incident.query.get_or_404(incident_id)
+            incident.assigned_to_id = reassigne
+            db.session.add(incident)
+            db.session.commit()
+            flash("Incident reassigned successfully", "success")
+            return redirect(url_for('bp.incident_detail', incident_id=incident_id))
+
 
 
 '''
