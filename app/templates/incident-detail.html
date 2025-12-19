@@ -6,13 +6,24 @@
         {{ incident.title }} | 
         ID: #{{ incident.id }} |
         {{ incident.status }} | 
-        Assigned to: {{ incident.assignee.name if incident.assignee else 'Unassigned' }}
+        Assigned to: {{ incident.assignee.name if incident.assignee else 'Unassigned' }} |
+        <form action="{{ url_for('bp.reassign_incident', incident_id=incident.id) }}" method="POST">
+            <label for="reassignee">Reassign</label>
+        </select>
+            <select id="reassignee" name="reassignee">
+                <option value="">---</option>
+                {% for user in users %}
+                <option value="{{ user.id }}">{{ user.name }}</option>
+                {% endfor %}
+        </select>
+        <button type="submit">Reassign</button>
+        </form>
         <form action="{{ url_for('bp.update_status', incident_id=incident.id) }}" method="POST">
             {% if incident.status == 'Open' and current_user.id == incident.assigned_to_id %} 
             <button type="submit" name="action" value="solve">Mark as Solved</button>
             {% endif %}
             {% if incident.status == 'Open' %} 
-            <button type="submit" name="action" value="cancel">Cancel</button>
+            <button type="submit" name="action" value="cancel">Cancel Incident</button>
             {% endif %}
         </form>
 
