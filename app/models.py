@@ -21,6 +21,7 @@ class Comment(db.Model):
     incident_id = db.Column(db.Integer, db.ForeignKey("incident.id"), nullable=False, index=True)
     content = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=db.func.current_timestamp())
+    is_system = db.Column(db.Boolean, nullable=False, default=False)
 
     commenter = db.relationship("User", foreign_keys=[commented_by_id], back_populates="comments")
     incident = db.relationship("Incident", back_populates="comments")
