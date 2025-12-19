@@ -76,7 +76,7 @@ def comment_incident(incident_id):
             flash("Comment cannot be empty!", "error")
             return redirect(url_for('bp.incident_detail', incident_id=incident_id))
         else:
-            new_comment = Comment(content=content, incident_id=incident_id)
+            new_comment = Comment(content=content, incident_id=incident_id, commented_by_id=current_user.id)
             db.session.add(new_comment)
             db.session.commit()
             flash("Comment added successfully!", "success")
