@@ -30,7 +30,7 @@
     </h1> 
     <h2>
         Severity: {{ incident.severity }} | 
-        Created at: {{ incident.created_at }} by {{ incident.creator.name }} |
+        Created at: {{ incident.created_at.strftime('%H:%M %d-%m-%Y ') }} by {{ incident.creator.name }} |
     </h2>
     <p style="font-size: 20px">{{ incident.description }}</p>
 </div>
@@ -48,11 +48,11 @@
     {% if not comment.is_system %}
     <div class="comment">
         <h4>{{ comment.commenter.name }}:</h4>
-        <p>{{ comment.content }} | {{ comment.created_at }}</p>
+        <p>{{ comment.content }} | {{ comment.created_at.strftime('%H:%M %d-%m-%Y ') }}</p>
     </div>
     {% else %}
     <div class="system-comment">
-        <p><em>{{ comment.content }} | {{ comment.created_at }}</em></p>
+        <p><em>{{ comment.content }} | {{ comment.created_at.strftime('%H:%M %d-%m-%Y ') }}</em></p>
     </div>
     {% endif %}
 {% endfor %}
