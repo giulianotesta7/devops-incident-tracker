@@ -35,6 +35,7 @@
 
 {% for comment in comments %}
     <div class="comment">
+        <h4>{{ comment.commenter.name }}:</h4>
         <p>{{ comment.content }}</p>
         <p><em>Posted at: {{ comment.created_at }}</em></p>
     </div>
