@@ -59,10 +59,14 @@ def update_status(incident_id):
         incident = Incident.query.get_or_404(incident_id)
         if action == 'solve':
             incident.status = 'Solved'
+            comment_content = f"Incident solved by {current_user.name}."
             flash("Incident marked as solved.", "success")
         elif action == 'cancel':
             incident.status = 'Cancelled'
+            comment_content = f"Incident cancelled by {current_user.name}."
             flash("Incident marked as cancelled.", "success")
+        new_comment = Comment(content=comment_content, incident_id=incident_id, commented_by_id=current_user.id, is_system=True)
+        db.session.add(new_comment)
         db.session.commit()
         
         return redirect(url_for('bp.incident_detail', incident_id=incident_id))
