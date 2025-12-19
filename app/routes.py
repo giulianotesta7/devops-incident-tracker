@@ -59,10 +59,14 @@ def update_status(incident_id):
         incident = Incident.query.get_or_404(incident_id)
         if action == 'solve':
             incident.status = 'Solved'
+            comment_content = f"Incident solved by {current_user.name}."
             flash("Incident marked as solved.", "success")
         elif action == 'cancel':
             incident.status = 'Cancelled'
+            comment_content = f"Incident cancelled by {current_user.name}."
             flash("Incident marked as cancelled.", "success")
+        new_comment = Comment(content=comment_content, incident_id=incident_id, commented_by_id=current_user.id, is_system=True)
+        db.session.add(new_comment)
         db.session.commit()
         
         return redirect(url_for('bp.incident_detail', incident_id=incident_id))
@@ -85,25 +89,32 @@ def comment_incident(incident_id):
 @bp.route('/incidents/<int:incident_id>/reassign', methods=['POST'])
 def reassign_incident(incident_id):
    if request.method == 'POST':
-        reassigne=request.form['reassignee']
-        if not reassigne:
+        reassigne_id=request.form['reassignee']
+        if not reassigne_id:
             incident = Incident.query.get_or_404(incident_id)
             incident.assigned_to_id = None
+            comment_content = f"Incident Unassigned by {current_user.name}."
+            new_comment = Comment(content=comment_content, incident_id=incident_id, commented_by_id=current_user.id, is_system=True)
             db.session.add(incident)
+            db.session.add(new_comment)
             db.session.commit()
             flash("Incident unassigned", "error")
             return redirect(url_for('bp.incident_detail', incident_id=incident_id))
         else:
             incident = Incident.query.get_or_404(incident_id)
-            incident.assigned_to_id = reassigne
+            incident.assigned_to_id = reassigne_id
+            reassigne = User.query.get(reassigne_id)
+            comment_content = f"Incident reassigned to {reassigne.name} by {current_user.name}."
+            
+            new_comment = Comment(content=comment_content, incident_id=incident_id, commented_by_id=current_user.id, is_system=True)
             db.session.add(incident)
+            db.session.add(new_comment)
             db.session.commit()
             flash("Incident reassigned successfully", "success")
             return redirect(url_for('bp.incident_detail', incident_id=incident_id))
 
 
-
-'''
+'''  
 @bp.route('/health')
 def health_check():
     return jsonify({'status': 'ok', 'message': 'service is up'}), 200
