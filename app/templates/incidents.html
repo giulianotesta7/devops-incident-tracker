@@ -2,6 +2,7 @@
 
 {% block body%}
 
+<fieldset role="group">
 <label>
   <input type="radio" name="status" value="pending" checked>
   Your pending Work
@@ -11,6 +12,7 @@
   <input type="radio" name="status" value="waiting">
   Waiting a solution
 </label>
+</fieldset>
 
 
 <div id="pendingBlock">
@@ -30,22 +32,34 @@
     {% endfor %}
 </div>
 
-<div id="waitingBlock">
+<section class="grid">
+
     {% for incident in incidents | selectattr("status", "equalto", "Open") | selectattr("created_by_id","equalto", current_user.id) %}
-        <div class="incident">
-            <h2>
+        <article>
+            <h3>
                 <a href="{{ url_for('bp.incident_detail', incident_id=incident.id) }}">
-                {{ incident.title }} | #{{ incident.id }} 
+                {{ incident.title }} 
                 </a>
-            </h2>
-            <p>Severity: {{ incident.severity }}</p>
-            <p>Status: {{ incident.status }}</p>
-            <p>Created at: {{ incident.created_at }}</p>
-        </div>
+                <small>
+                    #{{ incident.id }} 
+                </small>
+                
+            </h3>
+            <dl>
+                <dt>Severity: {{ incident.severity }}</dt>
+                <dt>Status: {{ incident.status }}</dt>
+                <dt>Created at: {{ incident.created_at.strftime('%H:%M %d-%m-%Y') }}</dt>
+            </dl>
+            <footer>
+                <small>{{ incident.description|truncate(75)}}</small>
+            </footer>
+        </article>
     {% else %}
         <p>No incidents found.</p>
     {% endfor %}
-</div>
+</section>
+
 
 <script src="{{ url_for('static', filename='js/incidents.js') }}"></script>
 {% endblock %}
+
