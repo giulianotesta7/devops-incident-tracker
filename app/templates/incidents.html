@@ -2,6 +2,7 @@
 
 {% block body%}
 
+<fieldset role="group">
 <label>
   <input type="radio" name="status" value="pending" checked>
   Your pending Work
@@ -11,41 +12,90 @@
   <input type="radio" name="status" value="waiting">
   Waiting a solution
 </label>
+</fieldset>
 
-
-<div id="pendingBlock">
+<table id="pendingBlock">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th style="width: 300px;">Title</th>
+      <th>Status</th>
+      <th>Assigned To</th>
+      <th>Severity</th>
+    </tr>
+  </thead>
+  <tbody>
     {% for incident in incidents | selectattr("status", "equalto", "Open") | selectattr("assigned_to_id","equalto", current_user.id) %}
-        <div class="incident">
-            <h2>
-                <a href="{{ url_for('bp.incident_detail', incident_id=incident.id) }}">
-                {{ incident.title }} | #{{ incident.id }} 
-                </a>
-            </h2>
-            <p>Severity: {{ incident.severity }}</p>
-            <p>Status: {{ incident.status }}</p>
-            <p>Created at: {{ incident.created_at }}</p>
-        </div>
+    <tr>
+      <td>
+        <a href="{{ url_for('bp.incident_detail', incident_id=incident.id) }}">
+          {{ incident.id }}
+        </a>
+      </td>
+      <td style="width: 300px;">
+        <a href="{{ url_for('bp.incident_detail', incident_id=incident.id) }}">
+            {{ incident.title | truncate(25) }}
+        </a>
+    </td>
+      <td>{{ incident.status }}</td>
+      <td>
+        {% if incident.assignee and incident.assignee.name %}
+            {{ incident.assignee.name }}
+        {% else %}
+            Unassigned
+        {% endif %}
+      </td>
+      <td>{{ incident.severity }}</td>
+    </tr>
     {% else %}
-        <p>No pending incidents found.</p>
+    <tr>
+      <td colspan="5">No incidents found.</td>
+    </tr>
     {% endfor %}
-</div>
+  </tbody>
+</table>
 
-<div id="waitingBlock">
+<table id="waitingBlock">
+  <thead>
+    <tr>
+      <th >#</th>
+      <th style="width: 300px;">Title</th>
+      <th>Status</th>
+      <th>Assigned To</th>
+      <th>Severity</th>
+    </tr>
+  </thead>
+  <tbody>
     {% for incident in incidents | selectattr("status", "equalto", "Open") | selectattr("created_by_id","equalto", current_user.id) %}
-        <div class="incident">
-            <h2>
-                <a href="{{ url_for('bp.incident_detail', incident_id=incident.id) }}">
-                {{ incident.title }} | #{{ incident.id }} 
-                </a>
-            </h2>
-            <p>Severity: {{ incident.severity }}</p>
-            <p>Status: {{ incident.status }}</p>
-            <p>Created at: {{ incident.created_at }}</p>
-        </div>
+    <tr>
+      <td>
+        <a href="{{ url_for('bp.incident_detail', incident_id=incident.id) }}">
+          {{ incident.id }}
+        </a>
+      </td>
+      <td style="width: 300px;">
+        <a href="{{ url_for('bp.incident_detail', incident_id=incident.id) }}">
+            {{ incident.title | truncate(25)}}
+        </a>
+    </td>
+      <td>{{ incident.status }}</td>
+      <td>
+        {% if incident.assignee and incident.assignee.name %}
+            {{ incident.assignee.name }}
+        {% else %}
+            Unassigned
+        {% endif %}
+      </td>
+      <td>{{ incident.severity }}</td>
+    </tr>
     {% else %}
-        <p>No incidents found.</p>
+    <tr>
+      <td colspan="5">No incidents found.</td>
+    </tr>
     {% endfor %}
-</div>
+  </tbody>
+</table>
 
 <script src="{{ url_for('static', filename='js/incidents.js') }}"></script>
 {% endblock %}
+
