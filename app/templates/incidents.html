@@ -25,7 +25,7 @@
     </tr>
   </thead>
   <tbody>
-    {% for incident in incidents | selectattr("status", "equalto", "Open") | selectattr("created_by_id","equalto", current_user.id) %}
+    {% for incident in incidents | selectattr("status", "equalto", "Open") | selectattr("assigned_to_id","equalto", current_user.id) %}
     <tr>
       <td>
         <a href="{{ url_for('bp.incident_detail', incident_id=incident.id) }}">
@@ -66,7 +66,7 @@
     </tr>
   </thead>
   <tbody>
-    {% for incident in incidents | selectattr("status", "equalto", "Open") | selectattr("assigned_to_id","equalto", current_user.id) %}
+    {% for incident in incidents | selectattr("status", "equalto", "Open") | selectattr("created_by_id","equalto", current_user.id) %}
     <tr>
       <td>
         <a href="{{ url_for('bp.incident_detail', incident_id=incident.id) }}">
