@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash, jsonify
-from models import Incident, Comment, User
-from database import db
+from .models import Incident, Comment, User
+from .database import db
 from flask_login import current_user, login_required
 
 bp = Blueprint('bp', __name__)

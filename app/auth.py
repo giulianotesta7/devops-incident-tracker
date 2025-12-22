@@ -1,10 +1,10 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
-from utils import is_valid_email
+from .utils import is_valid_email
 from werkzeug.security import generate_password_hash, check_password_hash
-from models import User
-from database import db
+from .models import User
+from .database import db
 from flask_login import login_user, logout_user
-from routes import bp
+from .routes import bp
 
 auth = Blueprint('auth', __name__)
 
