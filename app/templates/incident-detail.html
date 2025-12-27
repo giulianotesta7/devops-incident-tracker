@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<main class="container">
+  <article>
+    <header>
+      <hgroup>
+        <h1>{{ incident.title }}</h1>
+        <p>
+          <strong>ID:</strong> #{{ incident.id }} | 
+          <strong>Status:</strong> {{ incident.status }}
+        </p>
+      </hgroup>
+      <p>
+        <strong>Assigned to:</strong> 
+        {% if incident.assignee %}
+          <ins>{{ incident.assignee.name }}</ins>
+        {% else %}
+          <em>Unassigned</em>
+        {% endif %}
+      </p>
+    </header>
+
+    <section>
+      <div class="grid">
+        <form action="{{ url_for('bp.reassign_incident', incident_id=incident.id) }}" novalidate method="POST">
+          <fieldset role="group">
+            <select id="reassignee" name="reassignee" aria-label="Reassign">
+              <option value="" selected disabled>Reassign...</option>
+              {% for user in users %}
+              <option value="{{ user.id }}">{{ user.name }}</option>
+              {% endfor %}
+            </select>
+            <input type="submit" value="Assign" class="secondary">
+          </fieldset>
+        </form>
+
+        <form action="{{ url_for('bp.update_status', incident_id=incident.id) }}" novalidate method="POST">
+          <div class="grid">
+            {% if incident.status == 'Open' and current_user.id == incident.assigned_to_id %}
+            <button type="submit" name="action" value="solve">Solve</button>
+            {% endif %}
+            
+            {% if incident.status == 'Open' %}
+            <button type="submit" name="action" value="cancel" class="contrast outline">Cancel</button>
+            {% endif %}
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <hr>
+
+    <section>
+      <div class="grid">
+        <aside>
+          <p><strong>Severity:</strong> {{ incident.severity }}</p>
+        </aside>
+        <aside>
+          <p><strong>Created at:</strong> {{ incident.created_at.strftime('%H:%M %d-%m-%Y') }}</p>
+          <p><strong>By:</strong> {{ incident.creator.name }}</p>
+        </aside>
+      </div>
+      
+      <h3>Description</h3>
+      <blockquote>
+        {{ incident.description }}
+      </blockquote>
+    </section>
+
+    <footer>
+      <section>
+        <h2>Comments</h2>
+        
+        <form action="{{ url_for('bp.comment_incident', incident_id=incident.id) }}" novalidate method="POST">
+          <textarea id="comment" name="comment" aria-label="Comment" required></textarea>
+          <button type="submit" style="width: auto;">Comment</button>
+        </form>
+
+        {% for comment in comments %}
+          {% if not comment.is_system %}
+            <article>
+              <header>
+                <strong>{{ comment.commenter.name }}</strong>
+                <small class="secondary">{{ comment.created_at.strftime('%H:%M %d-%m-%Y') }}</small>
+              </header>
+              {{ comment.content }}
+            </article>
+          {% else %}
+            <p>
+              <small>
+                <mark>SYSTEM:</mark> 
+                <i>{{ comment.content }} — {{ comment.created_at.strftime('%H:%M %d-%m-%Y') }}</i>
+              </small>
+            </p>
+          {% endif %}
+        {% endfor %}
+      </section>
+    </footer>
+  </article>
+</main>
+{% endblock %}

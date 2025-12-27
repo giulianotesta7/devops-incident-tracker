@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+
+{% block body%}
+
+<form method="get" role="search">
+  <div role="group">
+    <input type="search" name="q" placeholder="Search by ID..." />
+    <button type="submit">
+      <svg width="16" height="16" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M10 6.5C10 8.433 8.433 10 6.5 10C4.567 10 3 8.433 3 6.5C3 4.567 4.567 3 6.5 3C8.433 3 10 4.567 10 6.5ZM9.30884 10.0159C8.53901 10.6318 7.56251 11 6.5 11C4.01472 11 2 8.98528 2 6.5C2 4.01472 4.01472 2 6.5 2C8.98528 2 11 4.01472 11 6.5C11 7.56251 10.6318 8.53901 10.0159 9.30884L12.8536 12.1464C13.0488 12.3417 13.0488 12.6583 12.8536 12.8536C12.6583 13.0488 12.3417 13.0488 12.1464 12.8536L9.30884 10.0159Z" fill="currentColor"/>
+      </svg>
+    </button>
+  </div>
+</form>
+
+
+
+
+<fieldset role="group">
+<label>
+  <input type="radio" name="status" value="pending" checked>
+  Your pending Work
+</label>
+
+<label>
+  <input type="radio" name="status" value="waiting">
+  Waiting a solution
+</label>
+</fieldset>
+
+<label>
+  <input type="radio" name="status" value="solved">
+  Your solved incidents
+</label>
+</fieldset>
+
+<table id="pendingBlock">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th style="width: 300px;">Title</th>
+      <th>Status</th>
+      <th>Assigned To</th>
+      <th>Severity</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for incident in incidents | selectattr("status", "equalto", "Open") | selectattr("assigned_to_id","equalto", current_user.id) %}
+    <tr>
+      <td>
+        <a href="{{ url_for('bp.incident_detail', incident_id=incident.id) }}">
+          {{ incident.id }}
+        </a>
+      </td>
+      <td style="width: 300px;">
+        <a href="{{ url_for('bp.incident_detail', incident_id=incident.id) }}">
+            {{ incident.title | truncate(25) }}
+        </a>
+    </td>
+      <td>{{ incident.status }}</td>
+      <td>
+        {% if incident.assignee and incident.assignee.name %}
+            {{ incident.assignee.name }}
+        {% else %}
+            Unassigned
+        {% endif %}
+      </td>
+      <td>{{ incident.severity }}</td>
+    </tr>
+    {% else %}
+    <tr>
+      <td colspan="5">No incidents found.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<table id="waitingBlock">
+  <thead>
+    <tr>
+      <th >#</th>
+      <th style="width: 300px;">Title</th>
+      <th>Status</th>
+      <th>Assigned To</th>
+      <th>Severity</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for incident in incidents | selectattr("status", "equalto", "Open") | selectattr("created_by_id","equalto", current_user.id) %}
+    <tr>
+      <td>
+        <a href="{{ url_for('bp.incident_detail', incident_id=incident.id) }}">
+          {{ incident.id }}
+        </a>
+      </td>
+      <td style="width: 300px;">
+        <a href="{{ url_for('bp.incident_detail', incident_id=incident.id) }}">
+            {{ incident.title | truncate(25)}}
+        </a>
+    </td>
+      <td>{{ incident.status }}</td>
+      <td>
+        {% if incident.assignee and incident.assignee.name %}
+            {{ incident.assignee.name }}
+        {% else %}
+            Unassigned
+        {% endif %}
+      </td>
+      <td>{{ incident.severity }}</td>
+    </tr>
+    {% else %}
+    <tr>
+      <td colspan="5">No incidents found.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<table id="solvedBlock">
+  <thead>
+    <tr>
+      <th >#</th>
+      <th style="width: 300px;">Title</th>
+      <th>Status</th>
+      <th>Solved By</th>
+      <th>Severity</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for incident in incidents | selectattr("status", "equalto", "Solved") | selectattr("solved_by_id","equalto", current_user.id) %}
+    <tr>
+      <td>
+        <a href="{{ url_for('bp.incident_detail', incident_id=incident.id) }}">
+          {{ incident.id }}
+        </a>
+      </td>
+      <td style="width: 300px;">
+        <a href="{{ url_for('bp.incident_detail', incident_id=incident.id) }}">
+            {{ incident.title | truncate(25)}}
+        </a>
+    </td>
+      <td>{{ incident.status }}</td>
+      <td>
+        {% if incident.assignee and incident.assignee.name %}
+            {{ incident.assignee.name }}
+        {% else %}
+            Unassigned
+        {% endif %}
+      </td>
+      <td>{{ incident.severity }}</td>
+    </tr>
+    {% else %}
+    <tr>
+      <td colspan="5">No incidents found.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<script src="{{ url_for('static', filename='js/incidents.js') }}"></script>
+{% endblock %}
+
