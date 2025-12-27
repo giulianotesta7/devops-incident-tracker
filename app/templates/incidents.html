@@ -14,6 +14,12 @@
 </label>
 </fieldset>
 
+<label>
+  <input type="radio" name="status" value="solved">
+  Your solved incidents
+</label>
+</fieldset>
+
 <table id="pendingBlock">
   <thead>
     <tr>
@@ -67,6 +73,47 @@
   </thead>
   <tbody>
     {% for incident in incidents | selectattr("status", "equalto", "Open") | selectattr("created_by_id","equalto", current_user.id) %}
+    <tr>
+      <td>
+        <a href="{{ url_for('bp.incident_detail', incident_id=incident.id) }}">
+          {{ incident.id }}
+        </a>
+      </td>
+      <td style="width: 300px;">
+        <a href="{{ url_for('bp.incident_detail', incident_id=incident.id) }}">
+            {{ incident.title | truncate(25)}}
+        </a>
+    </td>
+      <td>{{ incident.status }}</td>
+      <td>
+        {% if incident.assignee and incident.assignee.name %}
+            {{ incident.assignee.name }}
+        {% else %}
+            Unassigned
+        {% endif %}
+      </td>
+      <td>{{ incident.severity }}</td>
+    </tr>
+    {% else %}
+    <tr>
+      <td colspan="5">No incidents found.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<table id="solvedBlock">
+  <thead>
+    <tr>
+      <th >#</th>
+      <th style="width: 300px;">Title</th>
+      <th>Status</th>
+      <th>Solved By</th>
+      <th>Severity</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for incident in incidents | selectattr("status", "equalto", "Solved") | selectattr("solved_by_id","equalto", current_user.id) %}
     <tr>
       <td>
         <a href="{{ url_for('bp.incident_detail', incident_id=incident.id) }}">

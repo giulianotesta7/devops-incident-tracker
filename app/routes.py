@@ -60,6 +60,8 @@ def update_status(incident_id):
         if action == 'solve':
             incident.status = 'Solved'
             comment_content = f"Incident solved by {current_user.name}."
+            solver = User.query.get(current_user.id)
+            incident.solved_by_id = solver.id
             flash("Incident marked as solved.", "success")
         elif action == 'cancel':
             incident.status = 'Cancelled'
