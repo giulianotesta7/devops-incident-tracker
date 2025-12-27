@@ -33,12 +33,22 @@ def create_incident():
             db.session.add(new_incident)
             db.session.commit()
             flash("Incident created successfully!", "success")
-            return redirect(url_for('bp.create_incident'))
+            return redirect(url_for('bp.incidents'))
     
     return render_template('create-incident.html', users=db.session.query(User).all())
 
 @bp.route('/incidents')
 def incidents():
+    q = request.args.get('q', '').strip()
+    if q:
+        incident_id = q.lstrip('#')
+        if incident_id.isdigit():
+            incident = Incident.query.get(int(incident_id))
+            if incident:
+                return redirect(url_for('bp.incident_detail', incident_id=incident.id))
+            else:
+                flash("Incident not found.", "error")
+                return redirect(url_for('bp.incidents')) 
     incidents = Incident.query.order_by(Incident.created_at.desc()).all()
     return render_template('incidents.html', incidents=incidents)
 
@@ -60,6 +70,8 @@ def update_status(incident_id):
         if action == 'solve':
             incident.status = 'Solved'
             comment_content = f"Incident solved by {current_user.name}."
+            solver = User.query.get(current_user.id)
+            incident.solved_by_id = solver.id
             flash("Incident marked as solved.", "success")
         elif action == 'cancel':
             incident.status = 'Cancelled'
