@@ -1,5 +1,6 @@
+import os
 from flask import Flask
-from flask_migrate import Migrate
+from flask_migrate import Migrate, upgrade
 from flask_login import LoginManager
 from .routes import bp as main_bp
 from .auth import auth as auth_bp
@@ -31,8 +32,12 @@ def create_app():
     login_manager.init_app(app)
 
     @login_manager.user_loader
-    def load_user(user_id):  
+    def load_user(user_id):
         return User.query.get(int(user_id))
+
+    if os.getenv('RUN_MIGRATIONS', 'false').lower() == 'true':
+        with app.app_context():
+            upgrade()
 
     return app
 
