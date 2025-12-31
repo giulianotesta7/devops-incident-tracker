@@ -1,6 +1,6 @@
 services:
   web:
-    image: giulianotesta/incident-tracker:${VERSION:-latest}
+    image: ghcr.io/giulianotesta7/devops-incident-tracker:latest
     ports:
       - "5000:5000"
     environment:
