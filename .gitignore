@@ -4,4 +4,4 @@ venv/
 .dockerignore
 __pycache__/
 migrations/
-
+.ruff_cache/
