@@ -20,7 +20,7 @@ class Incident(db.Model):
     creator = db.relationship("User", foreign_keys=[created_by_id], back_populates="created_incidents")
     assignee = db.relationship("User", foreign_keys=[assigned_to_id], back_populates="assigned_incidents")
     solver = db.relationship("User", foreign_keys=[assigned_to_id], back_populates="solved_incidents")
-       
+
     def __init__(
         self,
         *,
@@ -47,7 +47,7 @@ class Comment(db.Model):
 
     commenter = db.relationship("User", foreign_keys=[commented_by_id], back_populates="comments")
     incident = db.relationship("Incident", back_populates="comments")
-        
+
     def __init__(
         self,
         *,
