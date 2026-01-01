@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<h1>Submit incident information</h1>
+
+<form action="{{ url_for('bp.create_incident') }}" novalidate method="POST">
+
+  <fieldset>
+    <label for="title">
+      Title
+      <input type="text" id="title" name="title" required>
+    </label>
+
+
+  <fieldset role="group" style="gap: 1rem;">
+    <label for="severity">
+      Severity
+      <select id="severity" name="severity" required>
+        <option value="Low">Low</option>
+        <option value="Medium">Medium</option>
+        <option value="High">High</option>
+      </select>
+    </label>
+
+    <label for="assignee">
+      Assign to
+      <select id="assignee" name="assignee">
+        <option value="">---</option>
+        {% for user in users %}
+        <option value="{{ user.id }}">{{ user.name }}</option>
+        {% endfor %}
+      </select>
+    </label>
+  </fieldset>
+
+    <label for="description">
+      Description
+      <textarea id="description" name="description" rows="4" required></textarea>
+    </label>
+  </fieldset>
+
+  <button type="submit" class="primary" style="width: auto;">Submit</button>
+</form>
+
+{% endblock %}

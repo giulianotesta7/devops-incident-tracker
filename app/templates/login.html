@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+<h2>Login</h2>
+
+<form action="" method="POST" novalidate style="max-width: 600px; margin: 0 auto" >
+  <fieldset>
+    <label for="email">
+      Email
+      <input type="email" id="email" name="email" required>
+    </label>
+
+    <label for="password">
+      Password
+      <input type="password" id="password" name="password" required>
+    </label>
+  </fieldset>
+
+  <button type="submit" class="primary" style="width: auto;">Login</button>
+</form>
+
+{% endblock %}
