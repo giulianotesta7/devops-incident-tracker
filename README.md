@@ -1,7 +1,7 @@
 # incident-tracker-devops
 
 Simple incident/ticket tracking web application built with Flask, backed by MySQL and containerized with Docker.  
-The project is used to practice a basic DevOps workflow with Docker, Docker Compose, Jenkins and deployment to an AWS EC2 instance.
+The project is used to practice a basic DevOps workflow with Docker, Docker Compose, Github Actions and deployment to an AWS EC2 instance.
 
 ## roadmap
 
@@ -10,6 +10,6 @@ The project is used to practice a basic DevOps workflow with Docker, Docker Comp
 - [X] Improve UI with templates and basic styling
 - [x] Integrate MySQL as the main database
 - [x] Dockerize the Flask app and database
-- [ ] Set up Jenkins CI pipeline (build and test)
-- [ ] Automate deployment to AWS EC2
+- [x] Set up Github Actions CI pipeline (build and test)
+- [x] Automate deployment to AWS EC2
 

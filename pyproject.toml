@@ -1,0 +1,24 @@
+[tool.ruff]
+target-version = "py313"
+line-length = 130
+
+[tool.ruff.lint]
+select = [
+    "F",        # Pyflakes rules
+    "E",        # PyCodeStyle errors
+    "W",        # PyCodeStyle warnings
+    "I",        # Sort imports properly
+    "UP",       # Warn if certain things can changed due to newer Python versions
+    "B",        # Bugbear common python errors
+    "C4",       # Catch incorrect use of comprehensions, dict, list, etc
+    "SIM",      # Common simplification rules
+    "RET",      # Good return practices
+    "S",        # Bandit security for webapps
+]
+
+ignore = [
+    "S101", 
+]
+
+[tool.ruff.lint.per-file-ignores]
+"migrations/*" = ["ALL"]
