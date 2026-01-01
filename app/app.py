@@ -12,16 +12,15 @@ from .routes import bp as main_bp
 
 
 def create_app():
-
     user = config.DB_USER
     password = config.DB_PASSWORD
     host = config.DB_HOST
     dbname = config.DB_MYSQL
 
     app = Flask(__name__)
-    app.config['SECRET_KEY'] = config.SECRET_KEY
-    app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{user}:{password}@{host}/{dbname}'
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config["SECRET_KEY"] = config.SECRET_KEY
+    app.config["SQLALCHEMY_DATABASE_URI"] = f"mysql+pymysql://{user}:{password}@{host}/{dbname}"
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
     db.init_app(app)
 
@@ -30,16 +29,15 @@ def create_app():
     app.register_blueprint(auth_bp)
 
     login_manager = LoginManager()
-    login_manager.login_view = 'auth.login'
+    login_manager.login_view = "auth.login"
     login_manager.init_app(app)
 
     @login_manager.user_loader
     def load_user(user_id):
         return User.query.get(int(user_id))
 
-    if os.getenv('RUN_MIGRATIONS', 'false').lower() == 'true':
+    if os.getenv("RUN_MIGRATIONS", "false").lower() == "true":
         with app.app_context():
             upgrade()
 
     return app
-
