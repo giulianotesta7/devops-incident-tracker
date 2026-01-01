@@ -20,6 +20,21 @@ class Incident(db.Model):
     creator = db.relationship("User", foreign_keys=[created_by_id], back_populates="created_incidents")
     assignee = db.relationship("User", foreign_keys=[assigned_to_id], back_populates="assigned_incidents")
     solver = db.relationship("User", foreign_keys=[assigned_to_id], back_populates="solved_incidents")
+       
+    def __init__(
+        self,
+        *,
+        title: str,
+        description: str,
+        severity: str,
+        created_by_id: int,
+        assigned_to_id: int | None = None,
+    ) -> None:
+        self.title = title
+        self.description = description
+        self.severity = severity
+        self.created_by_id = created_by_id
+        self.assigned_to_id = assigned_to_id
 
 
 class Comment(db.Model):
@@ -32,6 +47,19 @@ class Comment(db.Model):
 
     commenter = db.relationship("User", foreign_keys=[commented_by_id], back_populates="comments")
     incident = db.relationship("Incident", back_populates="comments")
+        
+    def __init__(
+        self,
+        *,
+        content: str,
+        incident_id: int,
+        commented_by_id: int,
+        is_system: bool = False,
+    ) -> None:
+        self.content = content
+        self.incident_id = incident_id
+        self.commented_by_id = commented_by_id
+        self.is_system = is_system
 
 
 class User(UserMixin, db.Model):
@@ -46,3 +74,14 @@ class User(UserMixin, db.Model):
     created_incidents = db.relationship("Incident", foreign_keys="Incident.created_by_id", back_populates="creator")
     assigned_incidents = db.relationship("Incident", foreign_keys="Incident.assigned_to_id", back_populates="assignee")
     solved_incidents = db.relationship("Incident", foreign_keys="Incident.solved_by_id", back_populates="solver")
+
+    def __init__(
+        self,
+        *,
+        name: str,
+        email: str,
+        password: str,
+    ) -> None:
+        self.name = name
+        self.email = email
+        self.password = password

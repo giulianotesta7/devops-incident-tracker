@@ -9,7 +9,7 @@ bp = Blueprint("bp", __name__)
 
 @bp.before_request
 @login_required
-def login_required():
+def requiere_login():
     pass
 
 
@@ -26,19 +26,19 @@ def about():
 @bp.route("/incidents/create", methods=["GET", "POST"])
 def create_incident():
     if request.method == "POST":
-        tittle = request.form["title"]
+        title = request.form["title"]
         description = request.form["description"]
         severity = request.form["severity"]
         assignee = request.form["assignee"]
-        if not tittle or not description or not severity:
+        if not title or not description or not severity:
             flash("All fields are required!", "error")
             return redirect(url_for("bp.create_incident"))
         new_incident = Incident(
-            title=tittle,
+            title=title,
             description=description,
             severity=severity,
             created_by_id=current_user.id,
-            assigned_to_id=assignee if assignee else None,
+            assigned_to_id=int(assignee) if assignee else None,
         )
         db.session.add(new_incident)
         db.session.commit()
@@ -77,13 +77,17 @@ def update_status(incident_id):
     if action == "solve":
         incident.status = "Solved"
         comment_content = f"Incident solved by {current_user.name}."
-        solver = User.query.get(current_user.id)
+        solver = User.query.get_or_404(current_user.id)
         incident.solved_by_id = solver.id
         flash("Incident marked as solved.", "success")
     elif action == "cancel":
         incident.status = "Cancelled"
         comment_content = f"Incident cancelled by {current_user.name}."
         flash("Incident marked as cancelled.", "success")
+    else:
+        flash("Invalid action.", "error")
+        return redirect(url_for("bp.incident_detail", incident_id=incident_id))
+
     new_comment = Comment(content=comment_content, incident_id=incident_id, commented_by_id=current_user.id, is_system=True)
     db.session.add(new_comment)
     db.session.commit()
@@ -119,7 +123,7 @@ def reassign_incident(incident_id):
         return redirect(url_for("bp.incident_detail", incident_id=incident_id))
     incident = Incident.query.get_or_404(incident_id)
     incident.assigned_to_id = reassigne_id
-    reassigne = User.query.get(reassigne_id)
+    reassigne = User.query.get_or_404(reassigne_id)
     comment_content = f"Incident reassigned to {reassigne.name} by {current_user.name}."
 
     new_comment = Comment(content=comment_content, incident_id=incident_id, commented_by_id=current_user.id, is_system=True)

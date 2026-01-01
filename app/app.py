@@ -29,7 +29,7 @@ def create_app():
     app.register_blueprint(auth_bp)
 
     login_manager = LoginManager()
-    login_manager.login_view = "auth.login"
+    login_manager.login_view = "auth.login" # type: ignore[assignment]
     login_manager.init_app(app)
 
     @login_manager.user_loader
