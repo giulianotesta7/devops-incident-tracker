@@ -11,5 +11,5 @@ The project is used to practice a basic DevOps workflow with Docker, Docker Comp
 - [x] Integrate MySQL as the main database
 - [x] Dockerize the Flask app and database
 - [x] Set up Github Actions CI pipeline (build and test)
-- [ ] Automate deployment to AWS EC2
+- [x] Automate deployment to AWS EC2
 
