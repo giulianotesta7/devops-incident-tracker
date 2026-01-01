@@ -1,12 +1,14 @@
 import os
+
 from flask import Flask
-from flask_migrate import Migrate, upgrade
 from flask_login import LoginManager
-from .routes import bp as main_bp
+from flask_migrate import Migrate, upgrade
+
 from .auth import auth as auth_bp
 from .config import config
 from .database import db
 from .models import User
+from .routes import bp as main_bp
 
 
 def create_app():
@@ -23,7 +25,7 @@ def create_app():
 
     db.init_app(app)
 
-    migrate = Migrate(app, db)
+    Migrate(app, db)
     app.register_blueprint(main_bp)
     app.register_blueprint(auth_bp)
 

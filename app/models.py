@@ -1,5 +1,7 @@
-from .database import db
 from flask_login import UserMixin
+
+from .database import db
+
 
 class Incident(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -36,7 +38,11 @@ class User(UserMixin, db.Model):
     name = db.Column(db.String(100), nullable=False)
     password = db.Column(db.String(255), nullable=False)
 
-    comments = db.relationship("Comment", foreign_keys="Comment.commented_by_id", back_populates="commenter", cascade="all, delete-orphan", lazy="select")
+    comments = db.relationship("Comment",
+                               foreign_keys="Comment.commented_by_id",
+                               back_populates="commenter",
+                               cascade="all, delete-orphan",
+                               lazy="select")
     created_incidents  = db.relationship("Incident", foreign_keys="Incident.created_by_id", back_populates="creator")
     assigned_incidents = db.relationship("Incident", foreign_keys="Incident.assigned_to_id", back_populates="assignee")
     solved_incidents  = db.relationship("Incident", foreign_keys="Incident.solved_by_id", back_populates="solver")
